@@ -1,4 +1,5 @@
 import MovieScore from "components/MovieScore";
+import { Link } from "react-router-dom";
 
 export default function MovieCard (){
     const movie = {
@@ -14,7 +15,10 @@ export default function MovieCard (){
             <div className="dsmovie-card-bottom-container">
                 <h3>{movie.title}</h3>
                 <MovieScore />
-                <div className="btn btn-primary dsmovie-btn">Avaliar</div>
+
+                <Link to={`/Form/${movie.id}`}> {/* componente react usando o react router para pegar o id dinamico e usar o to como um href */}
+                    <div className="btn btn-primary dsmovie-btn">Avaliar</div>
+                </Link>
             </div>
         </div>
     );
