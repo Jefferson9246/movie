@@ -1,7 +1,5 @@
 import axios from "axios";
 import MovieCard from "components/MovieCard";
-import MovieScore from "components/MovieScore";
-import MovieStar from "components/MovieStars";
 import Pagination from "components/Pagination";
 import { useEffect, useState } from "react";
 import { MoviePage } from "types/movie";
@@ -30,11 +28,15 @@ function Listing() {
                 console.log(response.data); */
             }
         )
-    },[pageNumber])
+    },[pageNumber]) //sempre que esse objeto mudar será feito uma nova requisição o que corrobora com o onclick e onchange dinamicamente
+
+    const handlePageChange = (newPageNumber : number) => {
+        setPageNumber(newPageNumber)
+    }
 
     return (
         <>
-            <Pagination />
+            <Pagination page={page} onChange={handlePageChange}/>
             <div className="container">
                 <div className="row">
                     {page.content.map(movie => (
