@@ -1,9 +1,10 @@
 
-import axios from 'axios';
+import axios, {AxiosRequestConfig} from 'axios';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import { Movie } from 'types/movie';
 import { BASE_URL } from 'utils/requests';
+import { validateEmail } from 'utils/validation';
 import './styles.css';
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 }
 
 function FormCard({movieId} : Props) {
+    const navigate = useNavigate();
    /*  const movie = {
         id: 1,
         image: "https://www.themoviedb.org/t/p/w533_and_h300_bestv2/jBJWaqoSCiARWtfV0GlqHrcdidd.jpg",
@@ -27,12 +29,38 @@ function FormCard({movieId} : Props) {
         })
     }, [movieId]) //a requisição só sera feita novamente quando o id mudar
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) =>{
+        e.preventDefault();
+
+        const email = (e.target as any).email.value;
+        const score = (e.target as any).score.value;
+
+        if(!validateEmail(email)){
+            return;
+        }
+
+        const config: AxiosRequestConfig = {
+            baseURL: BASE_URL,
+            method: 'PUT',
+            url: '/scores',
+            data: {
+                email: email,
+                movieId: movieId,
+                score: score
+            }
+        }
+
+        axios(config).then(res => {
+            navigate("/");
+        })
+
+    }
     return (
         <div className="dsmovie-form-container">
             <img className="dsmovie-movie-card-image" src={movie?.image} alt={movie?.title} />
             <div className="dsmovie-card-bottom-container">
                 <h3>{movie?.title}</h3>
-                <form className="dsmovie-form">
+                <form className="dsmovie-form" onSubmit={handleSubmit}>
                     <div className="form-group dsmovie-form-group">
                         <label htmlFor="email">Informe seu email</label>
                         <input type="email" className="form-control" id="email" />
